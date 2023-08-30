@@ -10,10 +10,15 @@ const handleCategory = async () => {
     categories.slice(0,3).forEach(category => {
         const div = document.createElement('div');
         div.innerHTML = `
-            <a class="tab tab-lifted">${category.category_name}</a>
+            <a onclick="handleLoadNews('${category.category_id}')" class="tab tab-lifted">${category.category_name}</a>
         `;
         tabContainer.appendChild(div);
     });
 }
+
+const handleLoadNews = categoryId => {
+    console.log(categoryId);
+}
+
 
 handleCategory();
