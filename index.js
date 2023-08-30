@@ -41,6 +41,7 @@ const handleLoadNews = async categoryId => {
                     <p>
                         ${news.details.slice(0,62)} ...read more
                     </p>
+                    <h3 class="italic font-medium">total views: ${news.total_view?news.total_view:"no views"}</h3>
                     <div class="card-footer flex justify-between mt-8">
                         <div class="flex">
                             <div>
@@ -52,7 +53,7 @@ const handleLoadNews = async categoryId => {
                                 </div>
                             </div>
                             <div>
-                                <h6>${news?.author?.name}</h6>
+                                <h6>${news?.author?.name?news.author.name:"anonymous"}</h6>
                                 <small>${news?.author?.published_date}</small>
                             </div>
                         </div>
@@ -70,5 +71,5 @@ const handleLoadNews = async categoryId => {
     })
 }
 
-
+handleLoadNews("01");
 handleCategory();
