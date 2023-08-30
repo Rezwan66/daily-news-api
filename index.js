@@ -72,19 +72,23 @@ const handleLoadNews = async categoryId => {
 }
 
 const handleModal = async newsId => {
-    console.log(newsId);
+    // console.log(newsId);
 
     const res = await fetch(`https://openapi.programming-hero.com/api/news/${newsId}`);
     const data = await res.json();
     console.log(data.data[0]);
+    const details = data.data[0];
 
     const modalContainer = document.getElementById('modal-container');
     const div = document.createElement('div');
     div.innerHTML = `
         <dialog id="news_details_modal" class="modal modal-bottom sm:modal-middle">
             <form method="dialog" class="modal-box">
-                <h3 class="font-bold text-lg">Hello!</h3>
-                <p class="py-4">Press ESC key or click the button below to close</p>
+                <figure><img src="${details?.image_url}" /></figure>
+                <h3 class="font-bold text-lg">${details.title}</h3>
+                <span class="badge badge-primary p-5">${details?.others_info?.is_trending===true?'TRENDING':''}</span>
+                <p class="py-4 italic">by ${details?.author?.name?details.author.name:"anonymous"} on ${details?.author?.published_date?details.author.published_date:"earlier"}</p>
+                <p class="py-4">${details.details}</p>
                 <div class="modal-action">
                     <button class="btn">Close</button>
                 </div>
