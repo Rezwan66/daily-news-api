@@ -3,6 +3,17 @@ const handleCategory = async () => {
 
     const data = await response.json();
     console.log(data.data.news_category);
+    const categories = data.data.news_category;
+
+    const tabContainer = document.getElementById('tab-container');
+
+    categories.slice(0,3).forEach(category => {
+        const div = document.createElement('div');
+        div.innerHTML = `
+            <a class="tab tab-lifted">${category.category_name}</a>
+        `;
+        tabContainer.appendChild(div);
+    });
 }
 
 handleCategory();
