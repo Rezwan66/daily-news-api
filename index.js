@@ -54,11 +54,11 @@ const handleLoadNews = async categoryId => {
                             </div>
                             <div>
                                 <h6>${news?.author?.name?news.author.name:"anonymous"}</h6>
-                                <small>${news?.author?.published_date}</small>
+                                <small>${news?.author?.published_date?news.author.published_date:"earlier"}</small>
                             </div>
                         </div>
                         <div class="card-detaild-btn">
-                            <button
+                            <button onclick="handleModal('${news._id}')"
                                 class="inline-block cursor-pointer rounded-md bg-gray-800 px-4 py-3 text-center text-sm font-semibold uppercase text-white transition duration-200 ease-in-out hover:bg-gray-900">
                                 Details
                             </button>
@@ -69,6 +69,10 @@ const handleLoadNews = async categoryId => {
         `;
         cardContainer.appendChild(div);
     })
+}
+
+const handleModal = async newsId => {
+    console.log(newsId);
 }
 
 handleLoadNews("01");
