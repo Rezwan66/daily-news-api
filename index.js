@@ -14,13 +14,14 @@ const handleCategory = async () => {
     categories.slice(0, 3).forEach(category => {
         const div = document.createElement('div');
         div.innerHTML = `
-            <a onclick="handleLoadNews('${category.category_id}')" class="tab tab-lifted">${category.category_name}</a>
+            <a onclick="handleLoadNews('${category.category_id}')" class="tab">${category.category_name}</a>
         `;
         tabContainer.appendChild(div);
     });
 }
 
 const handleLoadNews = async categoryId => {
+    handleSpinner(true);
     // console.log(categoryId);
     currentCategoryId = categoryId;
     const res = await fetch(`https://openapi.programming-hero.com/api/news/category/${currentCategoryId}`);
@@ -82,6 +83,7 @@ const handleLoadNews = async categoryId => {
         `;
         cardContainer.appendChild(div);
     })
+    handleSpinner(false);
 }
 
 const handleModal = async newsId => {
@@ -118,6 +120,16 @@ const handleSort = () => {
     handleLoadNews(currentCategoryId);
     console.log(isSorted);
 }
+
+const handleSpinner = (isLoading) => {
+    const spinnerDiv = document.getElementById('spinner-container');
+    if(isLoading){
+        spinnerDiv.classList.remove('hidden');
+    }else{
+        spinnerDiv.classList.add('hidden');
+    }
+}
+
 
 handleLoadNews("01");
 handleCategory();
