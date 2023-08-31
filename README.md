@@ -1,4 +1,5 @@
 # daily-news-api
+All content and API link credit goes to web.programming-hero.com
 
 ![screenshot-news-api](https://github.com/Rezwan66/daily-news-api/assets/63563859/70eec5ed-3908-4425-b468-98eb1473bcf4)
 
