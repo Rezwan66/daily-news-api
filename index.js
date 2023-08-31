@@ -1,3 +1,6 @@
+let isSorted = false; // track is sorted
+let currentCategoryId = null;
+
 const handleCategory = async () => {
     const response = await fetch('https://openapi.programming-hero.com/api/news/categories');
 
@@ -6,6 +9,7 @@ const handleCategory = async () => {
     const categories = data.data.news_category;
 
     const tabContainer = document.getElementById('tab-container');
+    tabContainer.textContent = '';
 
     categories.slice(0, 3).forEach(category => {
         const div = document.createElement('div');
@@ -18,14 +22,23 @@ const handleCategory = async () => {
 
 const handleLoadNews = async categoryId => {
     // console.log(categoryId);
-    const res = await fetch(`https://openapi.programming-hero.com/api/news/category/${categoryId}`);
+    currentCategoryId = categoryId;
+    const res = await fetch(`https://openapi.programming-hero.com/api/news/category/${currentCategoryId}`);
     const data = await res.json();
-    console.log(data.data);
     const newsByCategory = data.data;
-
+    console.log(newsByCategory);
     const cardContainer = document.getElementById('card-container');
     cardContainer.textContent = '';
 
+    // sorting logic for the newsByCategory array
+    if (isSorted) {
+        newsByCategory.sort((a, b) => {
+            const dateA = new Date(a.author.published_date);
+            const dateB = new Date(b.author.published_date);
+            return dateB - dateA;
+        });
+    }
+    console.log(newsByCategory);
     newsByCategory?.forEach(news => {
         const div = document.createElement('div');
         div.innerHTML = `
@@ -35,13 +48,13 @@ const handleLoadNews = async categoryId => {
                 </figure>
                 <div class="card-body">
                     <h2 class="card-title">
-                        ${news.title.slice(0,42)}
+                        ${news.title.slice(0, 42)}
                         <div class="badge badge-secondary p-5">${news?.rating?.badge}</div>
                     </h2>
                     <p>
-                        ${news.details.slice(0,62)} ...read more
+                        ${news.details.slice(0, 62)} <span onclick="handleModal('${news._id}')" class="text-primary cursor-pointer">...read more</span>
                     </p>
-                    <h3 class="italic font-medium">total views: ${news.total_view?news.total_view:"no views"}</h3>
+                    <h3 class="italic font-medium">total views: ${news.total_view ? news.total_view : "no views"}</h3>
                     <div class="card-footer flex justify-between mt-8">
                         <div class="flex">
                             <div>
@@ -53,8 +66,8 @@ const handleLoadNews = async categoryId => {
                                 </div>
                             </div>
                             <div>
-                                <h6>${news?.author?.name?news.author.name:"anonymous"}</h6>
-                                <small>${news?.author?.published_date?news.author.published_date:"earlier"}</small>
+                                <h6>${news?.author?.name ? news.author.name : "anonymous"}</h6>
+                                <small>${news?.author?.published_date ? news.author.published_date : "earlier"}</small>
                             </div>
                         </div>
                         <div class="card-detaild-btn">
@@ -86,8 +99,8 @@ const handleModal = async newsId => {
             <form method="dialog" class="modal-box">
                 <figure><img src="${details?.image_url}" /></figure>
                 <h3 class="font-bold text-lg">${details.title}</h3>
-                <span class="badge badge-primary p-5">${details?.others_info?.is_trending===true?'TRENDING':''}</span>
-                <p class="py-4 italic">by ${details?.author?.name?details.author.name:"anonymous"} on ${details?.author?.published_date?details.author.published_date:"earlier"}</p>
+                <span class="badge badge-primary p-5">${details?.others_info?.is_trending === true ? 'TRENDING' : ''}</span>
+                <p class="py-4 italic">by ${details?.author?.name ? details.author.name : "anonymous"} on ${details?.author?.published_date ? details.author.published_date : "earlier"}</p>
                 <p class="py-4">${details.details}</p>
                 <div class="modal-action">
                     <button class="btn">Close</button>
@@ -98,6 +111,12 @@ const handleModal = async newsId => {
     modalContainer.appendChild(div);
     const modal = document.getElementById('news_details_modal');
     modal.showModal();
+}
+
+const handleSort = () => {
+    isSorted = !isSorted;
+    handleLoadNews(currentCategoryId);
+    console.log(isSorted);
 }
 
 handleLoadNews("01");
